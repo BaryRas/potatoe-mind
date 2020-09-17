@@ -12,8 +12,8 @@
           label="Your task"
           name="Your task"
           v-model="task"
-          single-line
           type="texte"
+          :rules="taskRules"
           color="secondary"
         >
         </v-text-field>
@@ -66,21 +66,7 @@
 
     <!-- Find out if it's necessary  -->
     <!-- SnackBar -->
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      color="var(--v-background-base)"
-      rounded="pill"
-      light
-    >
-      <v-icon left>fa-exclamation-triangle</v-icon> Task is required
-
-      <template v-slot:action="{ attrs }">
-        <v-btn v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+    <success-snackbar :text="text" />
   </v-card>
 </template>
 
@@ -101,48 +87,47 @@ export default {
   data() {
     return {
       close: false,
-      snackbar: false,
       note: "",
       text: "Tasks added successfully",
-      timeout: 3000,
       date: new Date().toISOString().substr(0, 10),
       menu2: false,
       task: "",
       newTasks: [],
+      taskRules: [(v) => !!v || "Task is required"],
     };
   },
+
   methods: {
     ...mapMutations(["addNewTask"]),
 
     // Push tasks to firebase
     uploadTasks() {
-      // const { uuid } = require("uuidv4");
-      if (this.task === undefined || this.task === "") {
-        this.snackbar = true;
-      } else {
-        const item = {
-          id: uuid(),
-          title: this.task,
-          date: this.date,
-          done: false,
-          note: this.note,
-          idCategorie: this.categorie,
-        };
-        this.addNewTask({ index: this.categorie, newTasks: item });
-        this.$store.commit("distributeTask");
-        this.task = "";
-        this.note = "";
-        const todo = this.$store.state.todos[this.categorie].tasks;
+      const item = {
+        id: uuid(),
+        title: this.task,
+        date: this.date,
+        done: false,
+        note: this.note,
+        idCategorie: this.categorie,
+      };
+      this.addNewTask({ index: this.categorie, newTasks: item });
+      this.$store.commit("distributeTask");
+      this.task = "";
+      this.note = "";
+      const todo = this.$store.state.todos[this.categorie].tasks;
 
-        const id = this.$store.state.user;
+      const id = this.$store.state.user;
 
-        if (id !== null && id !== undefined) {
-          // upload to firebase
-          db.collection(id)
-            .doc(this.categorieName)
-            .update({ tasks: todo });
-        }
+      if (id !== null && id !== undefined) {
+        // upload to firebase
+        db.collection(id)
+          .doc(this.categorieName)
+          .update({ tasks: todo });
       }
+      this.$store.commit("switchAddTodoSnackbar");
+      setTimeout(() => {
+        this.$store.commit("switchAddTodo");
+      }, 3000);
     },
 
     closeDialog() {

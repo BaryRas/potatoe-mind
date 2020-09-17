@@ -2,29 +2,37 @@
   <div class="ml-8 mr-8">
     <v-row class="my-15">
       <v-col>
+        <h1 class="text-center font-weight-bold mb-10">
+          {{ todo.name }}
+        </h1>
         <h2>Progress is progress, no matter how small</h2>
         <span>{{ date }}</span>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <div class="add-todo">
-          <AddTodo
-            :categorieName="this.todo.name"
-            :categorie="this.categorie"
-          />
-        </div>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col>
         <v-card color="var(--v-background-base)" class="card-shadow pb-2">
-          <v-card-title class="text-center justify-center py-6">
-            <h1 class="font-weight-bold">
+          <!-- <v-card-title class="text-center justify-center py-6">
+            <h3 class="font-weight-bold">
               {{ todo.name }}
-            </h1>
-          </v-card-title>
+            </h3>
+          </v-card-title> -->
+          <v-card-actions v-if="!displayAddTodo">
+            <v-btn icon @click="toggleDisplayAddTodo" class="ml-5 my-8">
+              <v-icon>fa-plus</v-icon>
+            </v-btn>
+          </v-card-actions>
+          <!-- <v-row >
+            <v-col> -->
+          <div class="add-todo mb-15 pa-8" v-if="displayAddTodo">
+            <AddTodo
+              :categorieName="this.todo.name"
+              :categorie="this.categorie"
+            />
+          </div>
+          <!-- </v-col>
+          </v-row> -->
 
           <v-tabs
             v-model="tab"
@@ -85,9 +93,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col> </v-col>
-    </v-row>
   </div>
 </template>
 
@@ -113,7 +118,6 @@ export default {
       items: [],
       widgets: false,
       menu2: false,
-      addTodo: false,
       componentKey: 0,
       date: moment().format("dddd, D MMMM YYYY"),
     };
@@ -155,6 +159,12 @@ export default {
     ];
   },
 
+  computed: {
+    displayAddTodo() {
+      return this.$store.state.displayAddTodo;
+    },
+  },
+
   watch: {
     "$store.state.todos": {
       handler: function() {
@@ -182,6 +192,10 @@ export default {
       this.widgets != this.widgets;
     },
 
+    toggleDisplayAddTodo() {
+      this.$store.commit("switchAddTodo");
+    },
+
     deleteProject(name) {
       const user = this.$store.getters.user;
       if (user) {
@@ -197,3 +211,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+h1 {
+  font-size: 50px;
+  text-transform: uppercase;
+}
+</style>

@@ -6,9 +6,11 @@ import vuetify from "./plugins/vuetify";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import Alert from "./components/Shared/Alert.vue";
+import SuccessSnackbar from "./components/Shared/SuccessSnackbar.vue";
 
 Vue.config.productionTip = false;
 Vue.component("app-alert", Alert);
+Vue.component("success-snackbar", SuccessSnackbar);
 
 // Firebase and firestore
 firebase.initializeApp({

@@ -7,6 +7,8 @@ export default {
   error: null,
   photoURL: null,
   drawer: true,
+  addTodoSnackbar: false,
+  displayAddTodo: false,
   snackbar: false,
   loading: false,
   dialog: false,

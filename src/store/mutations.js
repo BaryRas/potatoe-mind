@@ -6,8 +6,20 @@ export default {
     state.drawer = !state.drawer;
   },
 
+  switchAddTodoSnackbar(state) {
+    console.log("comming soon");
+    state.addTodoSnackbar = !state.addTodoSnackbar;
+    setTimeout(() => {
+      state.addTodoSnackbar = false;
+    }, 3000);
+  },
+
   switchDialog(state) {
     state.dialog = !state.dialog;
+  },
+
+  switchAddTodo(state) {
+    state.displayAddTodo = !state.displayAddTodo;
   },
 
   // Transform datas date for static state (Guest)
