@@ -9,6 +9,7 @@ export default {
   drawer: true,
   addTodoSnackbar: false,
   displayAddTodo: false,
+  confirmWarningBox: false,
   snackbar: false,
   loading: false,
   dialog: false,

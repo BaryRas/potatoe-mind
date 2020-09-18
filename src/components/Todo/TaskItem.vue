@@ -13,6 +13,9 @@
       <!-- </div> -->
     </v-list-item-action>
 
+    <!-- Confirm Box -->
+    <confirm ref="confirm"></confirm>
+
     <v-list-item-content>
       <span class="mb-2">{{ task.title }}</span>
       <v-list-item-subtitle>{{ parseDate(task.date) }} </v-list-item-subtitle>
@@ -30,6 +33,7 @@
 <script>
 import { db } from "@/main";
 import moment from "moment-mini";
+import ConfirmBox from "@/components/Shared/ConfirmBox";
 
 export default {
   props: {
@@ -49,6 +53,9 @@ export default {
       type: String,
       required: true,
     },
+  },
+  components: {
+    confirm: ConfirmBox,
   },
   computed: {
     user() {
@@ -75,34 +82,39 @@ export default {
           return task.id === idtask;
         });
         updateTasks[0].done != updateTasks[0].done;
-      } else {
-        const keepTasks = tasks.filter((task) => {
-          return task.id !== idtask;
-        });
-        payload.tasks = keepTasks;
-      }
-
-      if (this.userAuthenticated) {
         this.$store.dispatch("editTask", payload);
       } else {
-        this.$store.commit("editTask", payload);
-        this.$store.commit("distributeTask");
+        this.$refs.confirm
+          .open("Delete", "Are you sure to delete this task?")
+          .then((confirm) => {
+            if (confirm) {
+              const keepTasks = tasks.filter((task) => {
+                return task.id !== idtask;
+              });
+              payload.tasks = keepTasks;
+              this.$store.commit("editTask", payload);
+              this.$store.commit("distributeTask");
+            }
+          });
       }
     },
 
     deletedTask(todoIndex, id) {
-      const payload = { todoIndex, id };
-      this.$store.commit("deletedTask", payload);
-      this.$store.commit("distributeTask");
+      if (this.$dialog.confirm("Are you sure to delete this task")) {
+        const payload = { todoIndex, id };
+        this.$store.commit("deletedTask", payload);
+        this.$store.commit("distributeTask");
 
-      if (this.userAuthenticated) {
-        const todo = this.$store.state.todos;
-        const tasks = todo[todoIndex].tasks;
-        db.collection(this.user)
-          .doc(this.categorie)
-          .update({ tasks });
+        if (this.userAuthenticated) {
+          const todo = this.$store.state.todos;
+          const tasks = todo[todoIndex].tasks;
+          db.collection(this.user)
+            .doc(this.categorie)
+            .update({ tasks });
+        }
       }
     },
+
     parseDate(date) {
       if (typeof date === "string") {
         return moment(date).format("dddd, D MMMM YYYY");
