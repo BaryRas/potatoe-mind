@@ -10,6 +10,9 @@
       </v-col>
     </v-row>
 
+    <!-- Confirm Box -->
+    <confirm ref="confirm"></confirm>
+
     <v-row>
       <v-col>
         <v-card color="var(--v-background-base)" class="card-shadow pb-2">
@@ -102,12 +105,14 @@ import TodoTabs from "./TodoTabs";
 import TaskItem from "./TaskItem";
 import uuid from "uuid/v4";
 import moment from "moment-mini";
+import ConfirmBox from "@/components/Shared/ConfirmBox";
 
 export default {
   components: {
     AddTodo,
     TodoTabs,
     TaskItem,
+    confirm: ConfirmBox,
   },
   data() {
     return {
@@ -198,15 +203,22 @@ export default {
 
     deleteProject(name) {
       const user = this.$store.getters.user;
-      if (user) {
-        this.$store.dispatch("deleteDbProject", { name });
-      } else {
-        this.$store.commit("deleteProject", { name });
-      }
 
-      this.$store.commit("distributeTask");
-      this.$router.push("/");
-      this.confirmBox = false;
+      this.$refs.confirm
+        .open("Delete", "Are you sure to delete this task?")
+        .then((confirm) => {
+          if (confirm) {
+            if (user) {
+              this.$store.dispatch("deleteDbProject", { name });
+            } else {
+              this.$store.commit("deleteProject", { name });
+            }
+
+            this.$store.commit("distributeTask");
+            this.$router.push("/");
+            this.confirmBox = false;
+          }
+        });
     },
   },
 };

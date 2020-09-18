@@ -110,6 +110,9 @@
       </template>
     </v-list>
 
+    <!-- Confirm Box -->
+    <confirm ref="confirm"></confirm>
+
     <!-- Bottom button Login/Logout -->
     <template v-slot:append>
       <v-list-item link @click="logButton" class="item-custom mb-2">
@@ -129,9 +132,14 @@
 
 <script>
 import uuid from "uuid/v4";
+import ConfirmBox from "@/components/Shared/ConfirmBox";
 
 export default {
   name: "Bar",
+
+  components: {
+    confirm: ConfirmBox,
+  },
 
   computed: {
     drawer() {
@@ -203,14 +211,20 @@ export default {
   methods: {
     logButton() {
       if (this.userAuthenticated) {
-        if (localStorage.hasOwnProperty("theme")) {
-          this.$vuetify.theme.dark;
-          localStorage.removeItem("theme");
-        }
-        this.$router.push("/login");
-        this.$store.dispatch("logout");
-        this.$store.commit("resetPhotoURL");
-        this.$store.dispatch("fetchData");
+        this.$refs.confirm
+          .open("Log Out", "Are you sure to leave Potatoe?")
+          .then((confirm) => {
+            if (confirm) {
+              if (localStorage.hasOwnProperty("theme")) {
+                this.$vuetify.theme.dark;
+                localStorage.removeItem("theme");
+              }
+              this.$store.dispatch("logout");
+              this.$router.push("/login");
+              this.$store.commit("resetPhotoURL");
+              this.$store.dispatch("fetchData");
+            }
+          });
       } else {
         this.$router.push("/login");
       }

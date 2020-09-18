@@ -18,6 +18,10 @@ export default {
     state.dialog = !state.dialog;
   },
 
+  switchConfirmWarningBox(state) {
+    state.confirmWarningBox = !state.confirmWarningBox;
+  },
+
   switchAddTodo(state) {
     state.displayAddTodo = !state.displayAddTodo;
   },

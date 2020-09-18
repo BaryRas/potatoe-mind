@@ -43,6 +43,9 @@
         <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
       </v-row>
 
+      <!-- Confirm Box -->
+      <confirm ref="confirm"></confirm>
+
       <!-- Show loader -->
       <div class="text-center" v-if="loading">
         <v-overlay :value="loading">
@@ -69,6 +72,7 @@
 
 <script>
 import Bar from "./components/Bar";
+import ConfirmBox from "@/components/Shared/ConfirmBox";
 
 export default {
   name: "App",
@@ -78,6 +82,7 @@ export default {
 
   components: {
     "app-bar": Bar,
+    confirm: ConfirmBox,
   },
 
   watch: {
@@ -117,14 +122,20 @@ export default {
 
     logButton() {
       if (this.user) {
-        if (localStorage.hasOwnProperty("theme")) {
-          this.$vuetify.theme.dark; // Keep the theme mode but remove localstorage item
-          localStorage.removeItem("theme");
-        }
-        this.$router.push("/login");
-        this.$store.dispatch("logout");
-        this.$store.commit("resetPhotoURL");
-        this.$store.dispatch("fetchData");
+        this.$refs.confirm
+          .open("Log Out", "Are you sure to leave Potatoe?")
+          .then((confirm) => {
+            if (confirm) {
+              if (localStorage.hasOwnProperty("theme")) {
+                this.$vuetify.theme.dark;
+                localStorage.removeItem("theme");
+              }
+              this.$store.dispatch("logout");
+              this.$router.push("/login");
+              this.$store.commit("resetPhotoURL");
+              this.$store.dispatch("fetchData");
+            }
+          });
       } else {
         this.$router.push("/login");
       }
