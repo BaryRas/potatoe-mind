@@ -16,26 +16,37 @@
     <v-row>
       <v-col>
         <v-card color="var(--v-background-base)" class="card-shadow pb-2">
-          <!-- <v-card-title class="text-center justify-center py-6">
-            <h3 class="font-weight-bold">
-              {{ todo.name }}
-            </h3>
-          </v-card-title> -->
           <v-card-actions v-if="!displayAddTodo">
-            <v-btn icon @click="toggleDisplayAddTodo" class="ml-5 my-8">
-              <v-icon>fa-plus</v-icon>
+            <v-btn
+              @click="toggleDisplayAddTodo"
+              class="ml-5 my-8"
+              color="var(--v-background-base)"
+            >
+              <v-icon left>fa-plus</v-icon> Add Task
             </v-btn>
+            <v-spacer></v-spacer>
+            <v-tooltip top color="var(--v-background-base)">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  @click="deleteProject(todo.name)"
+                  class="mr-5"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon color="secondary">fa-times</v-icon>
+                </v-btn>
+              </template>
+              <span>Delete Project</span>
+            </v-tooltip>
           </v-card-actions>
-          <!-- <v-row >
-            <v-col> -->
+
           <div class="add-todo mb-15 pa-8" v-if="displayAddTodo">
             <AddTodo
               :categorieName="this.todo.name"
               :categorie="this.categorie"
             />
           </div>
-          <!-- </v-col>
-          </v-row> -->
 
           <v-tabs
             v-model="tab"
@@ -77,22 +88,6 @@
               </v-card>
             </v-tab-item>
           </v-tabs-items>
-          <v-card-actions>
-            <v-tooltip top color="var(--v-background-base)">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  @click="deleteProject(todo.name)"
-                  class="ml-5"
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon color="secondary">fa-exclamation</v-icon>
-                </v-btn>
-              </template>
-              <span>Delete Project</span>
-            </v-tooltip>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>

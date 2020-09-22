@@ -160,7 +160,8 @@ body {
   font-size: $ruler;
 }
 
-.v-toolbar__title {
+.v-toolbar__title,
+.project-title {
   font-family: "Rock Salt", sans-serif;
 }
 
