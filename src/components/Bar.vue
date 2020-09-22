@@ -48,7 +48,22 @@
           </v-list-item-content>
         </v-list-item>
       </template>
-      <v-divider dark class="my-8"></v-divider>
+      <v-divider dark class="mt-8 mb-4"></v-divider>
+
+      <!-- User Project name -->
+      <h2 class="project-title text-center mb-3">Project</h2>
+      <template>
+        <v-list-item class="item-custom mb-10" link to="/project/new">
+          <v-list-item-action>
+            <v-icon color="textColor">fa-plus</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>
+              New Project
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
 
       <!-- User Projects list -->
       <template>
@@ -94,20 +109,6 @@
         </v-list-item>
       </template>
       <v-divider dark class="my-8"></v-divider>
-
-      <!-- User Projects list -->
-      <template>
-        <v-list-item class="item-custom " link to="/project/new">
-          <v-list-item-action>
-            <v-icon color="textColor">fa-plus</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>
-              New Project
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
     </v-list>
 
     <!-- Confirm Box -->

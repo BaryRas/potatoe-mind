@@ -58,10 +58,12 @@
     </v-card-text>
 
     <v-card-actions>
+      <v-spacer></v-spacer>
       <v-btn @click.prevent="uploadTasks" color="var(--v-background-base)">
         <v-icon left>fa-check-square-o</v-icon>
         Add Task
       </v-btn>
+      <v-spacer></v-spacer>
     </v-card-actions>
 
     <!-- Find out if it's necessary  -->
