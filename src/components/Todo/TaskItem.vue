@@ -82,7 +82,13 @@ export default {
           return task.id === idtask;
         });
         updateTasks[0].done != updateTasks[0].done;
-        this.$store.dispatch("editTask", payload);
+
+        if (this.userAuthenticated) {
+          this.$store.dispatch("editTask", payload);
+        } else {
+          this.$store.commit("editTask", payload);
+          this.$store.commit("distributeTask");
+        }
       } else {
         this.$refs.confirm
           .open("Delete", "Are you sure to delete this task?")
@@ -92,8 +98,13 @@ export default {
                 return task.id !== idtask;
               });
               payload.tasks = keepTasks;
-              this.$store.commit("editTask", payload);
-              this.$store.commit("distributeTask");
+
+              if (this.userAuthenticated) {
+                this.$store.dispatch("editTask", payload);
+              } else {
+                this.$store.commit("editTask", payload);
+                this.$store.commit("distributeTask");
+              }
             }
           });
       }
