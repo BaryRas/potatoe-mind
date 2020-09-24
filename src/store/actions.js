@@ -17,65 +17,61 @@ export default {
       });
   },
 
-  // SignUp with email
-  async signUserUp({ commit }, payload) {
-    commit("setLoading", true);
-    const todos = [
-      {
-        icon: "fa-briefcase",
-        name: "Work",
-        tasks: [
-          {
-            id: uuid(),
-            title: "Create my first Todo",
-            note: "I have to do it now",
-            date: new Date(),
-            done: false,
-            deleted: false,
-          },
-        ],
-      },
-    ];
-    let newUser = {};
-    Object.assign(newUser, { todos });
-
-    // New DB for new user
-    const newDBCollection = (userInfos, todo) => {
-      db.collection(userInfos.id)
-        .doc("Work")
-        .set(todo);
-
-      db.collection("users")
-        .doc(userInfos.id)
-        .set({
-          email: userInfos.email,
-          name: userInfos.name,
-          photoURL: userInfos.photoURL,
-        });
-      commit("setUser", userInfos);
+  // Create BD for a new user
+  createNewUserDB({ commit }, payload) {
+    const todos = {
+      icon: "fa-briefcase",
+      name: "Work",
+      tasks: [
+        {
+          id: uuid(),
+          title: "Create my first Todo",
+          note: "I have to do it now",
+          date: new Date(),
+          done: false,
+          deleted: false,
+        },
+      ],
     };
+    // New DB for new user
+    db.collection(payload.id)
+      .doc("Work")
+      .set(todos);
 
-    // A verifier
-    if (payload.social === "facebook" || payload.social === "google") {
+    db.collection("users")
+      .doc(payload.id)
+      .set({
+        email: payload.email,
+        name: payload.name,
+        photoURL: payload.photoURL,
+      });
+    commit("setUser", payload);
+  },
+
+  // Sign In/Up user with Popup
+  signUserWithPopup({ commit }, payload) {
+    console.log(payload.social);
+    return new Promise((resolve, reject) => {
+      commit("setLoading", true);
       const provider =
         payload.social === "google"
           ? new firebase.auth.GoogleAuthProvider()
           : new firebase.auth.FacebookAuthProvider();
+      let userInfos = {};
 
-      const cred = await firebase
+      firebase
         .auth()
         .signInWithPopup(provider)
         .then((result) => {
-          newUser.photoURL = result.user.photoURL;
-          newUser.id = result.user.uid;
-          newUser.name = result.user.displayName;
-          newUser.email = result.user.email
+          userInfos.isNewUser = result.additionalUserInfo.isNewUser;
+          userInfos.photoURL = result.user.photoURL;
+          userInfos.id = result.user.uid;
+          userInfos.name = result.user.displayName;
+          userInfos.email = result.user.email
             ? result.user.email
             : "No email register";
 
-          commit("setLoading", false);
-
-          return newUser;
+          resolve(userInfos);
         })
         .catch((error) => {
           // Handle Errors here.
@@ -88,102 +84,57 @@ export default {
           commit("setLoading", false);
 
           commit("setError", error);
-
+          reject();
           // ...
         });
-      newDBCollection(cred, todos[0]);
-    } else {
-      const cred = await firebase
+    });
+  },
+
+  // SignUp with email
+  signUpWithEmail({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      commit("setLoading", true);
+
+      firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
         .then((user) => {
+          let newUser = {};
           newUser.id = user.user.uid;
           newUser.name = payload.name;
           newUser.email = payload.email;
           newUser.photoURL = null;
-          commit("setLoading", false);
-
-          return newUser;
+          resolve(newUser);
         })
         .catch((err) => {
           commit("setLoading", false);
-
           commit("setError", err);
           console.log(err);
+          reject();
         });
-      newDBCollection(cred, todos[0]);
-    }
+    });
   },
 
-  // Sign in to firestore
-  signUserIn({ commit }, payload) {
-    commit("setLoading", true);
-    if (payload.social) {
-      return new Promise((resolve, reject) => {
-        const provider =
-          payload.social === "google"
-            ? new firebase.auth.GoogleAuthProvider()
-            : new firebase.auth.FacebookAuthProvider();
+  // SIGN IN with email
+  signInWithEmail({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      commit("setLoading", true);
 
-        firebase
-          .auth()
-          .signInWithPopup(provider)
-          .then((result) => {
-            const usernew = result.additionalUserInfo.isNewUser;
-            if (usernew == true) {
-              commit("setError", {
-                message: "New User, please signup and join our team!",
-              });
-              result.user.delete();
-              commit("setLoading", false);
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.email, payload.password)
+        .then((user) => {
+          let id = user.user.uid;
+          commit("setUser", id);
+          resolve();
+        })
+        .catch((err) => {
+          commit("setError", err);
+          commit("setLoading", false);
 
-              resolve();
-            } else {
-              const id = result.user.uid;
-              commit("setUser", id);
-              commit("setLoading", false);
-
-              resolve();
-            }
-          })
-          .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            const credential = error.credential;
-            commit("setLoading", false);
-
-            commit("setError", error);
-
-            // ...
-            reject();
-          });
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(payload.email, payload.password)
-          .then((user) => {
-            let id = user.user.uid;
-            commit("setUser", id);
-            commit("setLoading", false);
-
-            resolve();
-            // commit("setLoading", false);
-          })
-          .catch((err) => {
-            // commit("setLoading", false);
-            commit("setError", err);
-            commit("setLoading", false);
-
-            reject();
-          });
-      });
-    }
+          reject();
+        });
+    });
   },
 
   // Fetching Register User Datas

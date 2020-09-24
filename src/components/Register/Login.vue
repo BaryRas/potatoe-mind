@@ -20,7 +20,7 @@
                         fab
                         color="blue-grey lighten-2"
                         outlined=""
-                        @click="onSignIn('facebook')"
+                        @click="signUserWithSocial('facebook')"
                       >
                         <v-icon> fa-facebook-f</v-icon>
                       </v-btn>
@@ -29,7 +29,7 @@
                         fab
                         color="blue-grey lighten-2"
                         outlined=""
-                        @click="onSignIn('google')"
+                        @click="signUserWithSocial('google')"
                       >
                         <v-icon> fa-google</v-icon>
                       </v-btn>
@@ -126,7 +126,7 @@
                         fab
                         color="blue-grey lighten-2"
                         outlined=""
-                        @click="onSignUp('facebook')"
+                        @click="signUserWithSocial('facebook')"
                       >
                         <v-icon>fa-facebook-f</v-icon>
                       </v-btn>
@@ -135,7 +135,7 @@
                         fab
                         color="blue-grey lighten-2"
                         outlined=""
-                        @click="onSignUp('google')"
+                        @click="signUserWithSocial('google')"
                       >
                         <v-icon> fa-google</v-icon>
                       </v-btn>
@@ -253,46 +253,51 @@ export default {
   },
 
   methods: {
+    signUserWithSocial(social) {
+      this.$store
+        .dispatch("signUserWithPopup", { social })
+        .then((newUser) => {
+          console.log(newUser);
+          if (newUser.isNewUser) {
+            this.$store.dispatch("createNewUserDB", newUser);
+          } else {
+            const id = newUser.id;
+            this.$store.commit("setUser", { id });
+          }
+        })
+        .then(() => {
+          this.$store.dispatch("fetchRegisterUserData");
+          this.$store.commit("setLoading", false);
+        });
+    },
+
     onSignUp(social) {
       let payload = {};
-      if (social === "facebook" || social === "google") {
-        payload.social = social;
-        this.$store.dispatch("signUserUp", payload);
-      } else {
-        payload.email = this.email;
-        payload.password = this.password;
-        payload.name = this.name;
-        this.$store.dispatch("signUserUp", payload);
-      }
+      payload.email = this.email;
+      payload.password = this.password;
+      payload.name = this.name;
+      this.$store
+        .dispatch("signUpWithEmail", payload)
+        .then((newUser) => {
+          this.$store.dispatch("createNewUserDB", newUser);
+        })
+        .then(() => {
+          this.$store.dispatch("fetchRegisterUserData");
+          this.$store.commit("setLoading", false);
+        });
     },
-    onSignIn(social) {
-      if (social === "facebook" || social === "google") {
-        this.$store
-          .dispatch("signUserIn", {
-            email: this.email,
-            password: this.password,
-            social,
-          })
-          .then(() => {
-            const error = this.$store.state.error;
-            if (error) {
-              this.$store.commit("setUser", { id: null });
-              this.$router.push("/login");
-            } else {
-              this.$store.dispatch("fetchRegisterUserData", this.user);
-            }
-          });
-      } else {
-        this.$store
-          .dispatch("signUserIn", {
-            email: this.email,
-            password: this.password,
-          })
-          .then(() => {
-            this.$store.dispatch("fetchRegisterUserData", this.user);
-          });
-      }
+
+    onSignIn() {
+      this.$store
+        .dispatch("signInWithEmail", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => {
+          this.$store.dispatch("fetchRegisterUserData");
+        });
     },
+
     switchDialog() {
       this.$store.commit("switchDialog");
     },

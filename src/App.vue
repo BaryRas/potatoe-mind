@@ -15,7 +15,8 @@
             </v-badge>
           </v-btn>
         </template>
-        <span>Logged Button</span>
+        <span v-if="user">Log out</span>
+        <span v-else>Log in</span>
       </v-tooltip>
 
       <v-tooltip bottom color="var(--v-background-base)">
