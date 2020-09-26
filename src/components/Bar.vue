@@ -26,6 +26,7 @@
           link
           :to="{
             name: 'Home',
+            path: `/${$i18n.locale}/`,
             params: { class: i },
             hash: `#${item.icon}`,
           }"
@@ -43,7 +44,7 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              {{ item.text }}
+              {{ $t(`bar.${item.text}`) }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -51,15 +52,19 @@
       <v-divider dark class="mt-8 mb-4"></v-divider>
 
       <!-- User Project name -->
-      <h2 class="project-title text-center mb-3">Project</h2>
+      <h2 class="project-title text-center mb-3">{{ $t("bar.project") }}</h2>
       <template>
-        <v-list-item class="item-custom mb-10" link to="/project/new">
+        <v-list-item
+          class="item-custom mb-10"
+          link
+          :to="`/${$i18n.locale}/project/new`"
+        >
           <v-list-item-action>
             <v-icon color="textColor">fa-plus</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>
-              New Project
+              {{ $t("bar.new-project") }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -73,6 +78,7 @@
           link
           :to="{
             name: 'Todo',
+            path: `/${$i18n.locale}/todo/${content.name}`,
             params: {
               project: content.name,
               data: content,
@@ -119,11 +125,13 @@
       <v-list-item link @click="logButton" class="item-custom mb-2">
         <!-- <v-list-item link to="/" class="item-custom mb-2"> -->
         <v-list-item-action>
-          <v-icon color="textColor">{{ authenticateMenu.icon }}</v-icon>
+          <v-icon color="textColor">{{
+            user ? "fa-sign-out" : "fa-sign-in"
+          }}</v-icon>
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>
-            {{ authenticateMenu.button }}
+            {{ user ? $t("sign.log-out") : $t("sign.log-in") }}
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -134,6 +142,7 @@
 <script>
 import uuid from "uuid/v4";
 import ConfirmBox from "@/components/Shared/ConfirmBox";
+import i18n from "../i18n";
 
 export default {
   name: "Bar",
@@ -149,6 +158,9 @@ export default {
 
     windowWidth() {
       return this.$store.state.windowWidth;
+    },
+    user() {
+      return this.$store.getters.user;
     },
 
     categories() {
@@ -184,25 +196,6 @@ export default {
         return avatar.substring(0, 2);
       }
     },
-
-    authenticateMenu() {
-      let authenticateMenu = {};
-      if (this.userAuthenticated) {
-        authenticateMenu = {
-          icon: "fa-sign-out",
-          button: "Log Out",
-        };
-      } else {
-        authenticateMenu = {
-          icon: "fa-sign-in",
-          button: "Log In",
-        };
-      }
-      return authenticateMenu;
-    },
-    userAuthenticated() {
-      return this.$store.getters.userAuthenticated;
-    },
   },
   created() {
     if (this.$store.state.windowWidth <= 600) {
@@ -211,9 +204,14 @@ export default {
   },
   methods: {
     logButton() {
-      if (this.userAuthenticated) {
+      if (this.user) {
         this.$refs.confirm
-          .open("Log Out", "Are you sure to leave Potatoe?")
+          .open(
+            i18n.locale == "en" ? "Log Out" : "S'identifier",
+            i18n.locale == "en"
+              ? "Are you sure to leave Potatoe?"
+              : "Etes-vous sûr de quitter Potatoe?"
+          )
           .then((confirm) => {
             if (confirm) {
               if (localStorage.hasOwnProperty("theme")) {
@@ -221,13 +219,13 @@ export default {
                 localStorage.removeItem("theme");
               }
               this.$store.dispatch("logout");
-              this.$router.push("/login");
+              this.$router.push(`/${i18n.locale}/login`);
               this.$store.commit("resetPhotoURL");
               this.$store.dispatch("fetchData");
             }
           });
       } else {
-        this.$router.push("/login");
+        this.$router.push(`/${i18n.locale}/login`);
       }
     },
 

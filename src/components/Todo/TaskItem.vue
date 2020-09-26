@@ -1,5 +1,5 @@
 <template>
-  <v-list-item>
+  <v-list-item class="item-custom">
     <v-list-item-action class="checkbox d-flex">
       <div class="switch">
         <input
@@ -18,7 +18,11 @@
 
     <v-list-item-content>
       <span class="mb-2">{{ task.title }}</span>
-      <v-list-item-subtitle>{{ parseDate(task.date) }} </v-list-item-subtitle>
+      <v-list-item-subtitle>
+        {{
+          $d(new Date(parseDate(task.date)), "short", `${dateLocale}`)
+        }}</v-list-item-subtitle
+      >
       <v-list-item-title>{{ task.note }}</v-list-item-title>
     </v-list-item-content>
 
@@ -34,6 +38,7 @@
 import { db } from "@/main";
 import moment from "moment-mini";
 import ConfirmBox from "@/components/Shared/ConfirmBox";
+import i18n from "../../i18n";
 
 export default {
   props: {
@@ -64,6 +69,9 @@ export default {
     userAuthenticated() {
       return this.$store.getters.userAuthenticated;
     },
+    dateLocale() {
+      return i18n.locale == "en" ? "en-US" : "fr-FR";
+    },
   },
   methods: {
     editTask(idtask, idCategorie, editType) {
@@ -91,7 +99,12 @@ export default {
         }
       } else {
         this.$refs.confirm
-          .open("Delete", "Are you sure to delete this task?")
+          .open(
+            i18n.locale == "en" ? "Delete" : "Supprimer",
+            i18n.locale == "en"
+              ? "Are you sure to delete this task?"
+              : "Etes-vous sûr de vouloir supprimer cette tâche?"
+          )
           .then((confirm) => {
             if (confirm) {
               const keepTasks = tasks.filter((task) => {
@@ -111,7 +124,14 @@ export default {
     },
 
     deletedTask(todoIndex, id) {
-      if (this.$dialog.confirm("Are you sure to delete this task")) {
+      if (
+        this.$dialog.confirm(
+          i18n.locale == "en" ? "Delete" : "Supprimer",
+          i18n.locale == "en"
+            ? "Are you sure to delete this task?"
+            : "Etes-vous sûr de vouloir supprimer cette tâche?"
+        )
+      ) {
         const payload = { todoIndex, id };
         this.$store.commit("deletedTask", payload);
         this.$store.commit("distributeTask");

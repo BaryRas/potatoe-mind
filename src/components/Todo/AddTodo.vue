@@ -1,16 +1,16 @@
 <template>
   <v-card color="var(--v-background-base)" class="pa-5 card-shadow">
-    <v-card-title class="headline"
-      >What tasks are you planning to perform?</v-card-title
-    >
+    <v-card-title class="headline">{{
+      $t("add-task.question-task")
+    }}</v-card-title>
 
-    <v-card-subtitle>Add note and plan your potatoes recipe!</v-card-subtitle>
+    <v-card-subtitle>{{ $t("add-task.suggest-note-task") }}</v-card-subtitle>
 
     <v-card-text class="mt-12 mb-8">
       <v-form class="full-width">
         <v-text-field
-          label="Your task"
-          name="Your task"
+          :label="`${$t('add-task.input-task')}`"
+          :name="`${$t('add-task.input-task')}`"
           v-model="task"
           type="texte"
           :rules="taskRules"
@@ -18,8 +18,8 @@
         >
         </v-text-field>
         <v-text-field
-          label="Add note"
-          name="Add note"
+          :label="`${$t('add-task.input-note')}`"
+          :name="`${$t('add-task.input-note')}`"
           v-model="note"
           single-line
           type="texte"
@@ -59,12 +59,25 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn @click.prevent="uploadTasks" color="var(--v-background-base)">
+      <v-btn
+        @click.prevent="uploadTasks"
+        color="var(--v-background-base)"
+        v-if="task"
+      >
         <v-icon left>fa-check-square-o</v-icon>
-        Add Task
+        {{ $t("todo.add-button") }}
+      </v-btn>
+      <v-btn @click.prevent="cancelAddTask" color="var(--v-background-base)">
+        <v-icon left>fa-reply</v-icon>
+        {{ $t("recover.cancel") }}
       </v-btn>
       <v-spacer></v-spacer>
     </v-card-actions>
+
+    <!-- Show if only error   -->
+    <v-row class="d-flex justify-center mt-18" v-if="error">
+      <app-alert @dismissed="onDismissed" :text="error"></app-alert>
+    </v-row>
 
     <!-- Find out if it's necessary  -->
     <!-- SnackBar -->
@@ -77,6 +90,7 @@ import { mapMutations } from "vuex";
 import TaskItem from "./TaskItem";
 import { db } from "@/main";
 import uuid from "uuid/v4";
+import i18n from "../../i18n";
 
 export default {
   props: {
@@ -90,18 +104,40 @@ export default {
     return {
       close: false,
       note: "",
-      text: "Tasks added successfully",
+      text:
+        i18n.locale == "en"
+          ? "Tasks added successfully"
+          : "Tâche ajoutée avec succès",
       date: new Date().toISOString().substr(0, 10),
       menu2: false,
       task: "",
       newTasks: [],
-      taskRules: [(v) => !!v || "Task is required"],
+      taskRules: [
+        (v) =>
+          !!v ||
+          (i18n.locale == "en"
+            ? "Task is required"
+            : "Entréé vide n'est pas valide"),
+      ],
     };
+  },
+
+  computed: {
+    error() {
+      return this.$store.state.error;
+    },
   },
 
   methods: {
     ...mapMutations(["addNewTask"]),
+    onDismissed() {
+      this.$store.dispatch("clearError");
+    },
 
+    cancelAddTask() {
+      this.task = "";
+      this.$store.commit("switchAddTodo");
+    },
     // Push tasks to firebase
     uploadTasks() {
       const item = {
@@ -129,7 +165,7 @@ export default {
       this.$store.commit("switchAddTodoSnackbar");
       setTimeout(() => {
         this.$store.commit("switchAddTodo");
-      }, 3000);
+      }, 2000);
     },
 
     closeDialog() {

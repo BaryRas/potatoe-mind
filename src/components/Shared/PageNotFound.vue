@@ -5,18 +5,22 @@
       <p class="mb-10">
         <span class="text-decoration-line-through"> PAGE</span> NOT FOUND
       </p>
-      <v-btn color="var(--v-background-base)" @click="goHome">HOME</v-btn>
+      <v-btn color="var(--v-background-base)" @click="goHome">{{
+        $t("menu.home")
+      }}</v-btn>
     </div>
   </div>
 </template>
 
 <script>
+import i18n from "../../i18n";
+
 export default {
   name: "PageNotFound",
   methods: {
     goHome() {
       this.$router.push({
-        path: "/",
+        path: `/${i18n.locale}/`,
       });
     },
   },

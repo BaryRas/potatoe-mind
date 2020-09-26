@@ -53,7 +53,9 @@
       </div>
     </v-card-text>
 
-    <v-card-title class="headline">{{ todo.tasks.length }} Tasks</v-card-title>
+    <v-card-title class="headline"
+      >{{ todo.tasks.length }} {{ $t("list-project.task") }}</v-card-title
+    >
 
     <v-card-subtitle>{{ todo.name }}</v-card-subtitle>
     <v-card-text class="d-flex d-sm-none">

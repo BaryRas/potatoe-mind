@@ -5,8 +5,8 @@
         <h1 class="text-center font-weight-bold mb-10">
           {{ todo.name }}
         </h1>
-        <h2>Progress is progress, no matter how small</h2>
-        <span>{{ date }}</span>
+        <h2>{{ $t("header.quote") }}</h2>
+        <span>{{ $d(new Date(), "short", `${dateLocale}`) }}</span>
       </v-col>
     </v-row>
 
@@ -22,7 +22,7 @@
               class="ml-5 my-8"
               color="var(--v-background-base)"
             >
-              <v-icon left>fa-plus</v-icon> Add Task
+              <v-icon left>fa-plus</v-icon> {{ $t("todo.add-button") }}
             </v-btn>
             <v-spacer></v-spacer>
             <v-tooltip top color="var(--v-background-base)">
@@ -37,7 +37,7 @@
                   <v-icon color="secondary">fa-times</v-icon>
                 </v-btn>
               </template>
-              <span>Delete Project</span>
+              <span>{{ $t("todo.delete-project") }}</span>
             </v-tooltip>
           </v-card-actions>
 
@@ -56,7 +56,7 @@
             centered
           >
             <v-tab v-for="item in items" :key="item.id">
-              {{ item.label }}
+              {{ $t(`bar.${item.label}`) }}
             </v-tab>
           </v-tabs>
 
@@ -69,12 +69,12 @@
                   class="text-center my-15"
                 >
                   <!-- If no Task -->
-                  No Longer Task, You are Good
+                  {{ $t("tabs.tab-message") }}
                 </v-card-text>
 
                 <!-- If Array is not umpty -->
                 <v-card-text v-else>
-                  <v-list color="var(--v-background-base)" dense>
+                  <v-list color="var(--v-background-base)" dense shaped>
                     <task-item
                       v-for="(task, i) in item.content"
                       :key="i"
@@ -101,6 +101,7 @@ import TaskItem from "./TaskItem";
 import uuid from "uuid/v4";
 import moment from "moment-mini";
 import ConfirmBox from "@/components/Shared/ConfirmBox";
+import i18n from "../../i18n";
 
 export default {
   components: {
@@ -137,22 +138,22 @@ export default {
 
     this.items = [
       {
-        label: "Today",
+        label: "today",
         content: this.todo.items[0],
         id: uuid(),
       },
       {
-        label: "Upcomming",
+        label: "upcoming",
         content: this.todo.items[1],
         id: uuid(),
       },
       {
-        label: "Out Date",
+        label: "outdate",
         content: this.todo.items[2],
         id: uuid(),
       },
       {
-        label: "All Tasks",
+        label: "all-tasks",
         content: this.todo.items[3],
         id: uuid(),
       },
@@ -162,6 +163,9 @@ export default {
   computed: {
     displayAddTodo() {
       return this.$store.state.displayAddTodo;
+    },
+    dateLocale() {
+      return i18n.locale == "en" ? "en-US" : "fr-FR";
     },
   },
 
@@ -200,7 +204,12 @@ export default {
       const user = this.$store.getters.user;
 
       this.$refs.confirm
-        .open("Delete", "Are you sure to delete this task?")
+        .open(
+          i18n.locale == "en" ? "Delete" : "Supprimer",
+          i18n.locale == "en"
+            ? "Are you sure to delete this project?"
+            : "Etes-vous sûr de supprimer ce projet?"
+        )
         .then((confirm) => {
           if (confirm) {
             if (user) {

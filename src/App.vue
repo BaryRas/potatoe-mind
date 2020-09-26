@@ -7,6 +7,23 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>Potatoe Mind</v-toolbar-title>
       <v-spacer></v-spacer>
+
+      <v-tooltip bottom color="var(--v-background-base)">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on" class="mr-3">
+            <!-- Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
+            <v-avatar>
+              <img
+                @click="setLocal()"
+                src="./assets/lang.png"
+                alt="flag-lang"
+              />
+            </v-avatar>
+          </v-btn>
+        </template>
+        <span>{{ $t("menu.lang") }}</span>
+      </v-tooltip>
+
       <v-tooltip bottom color="var(--v-background-base)">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon @click="logButton" class="mr-3" v-bind="attrs" v-on="on">
@@ -15,8 +32,7 @@
             </v-badge>
           </v-btn>
         </template>
-        <span v-if="user">Log out</span>
-        <span v-else>Log in</span>
+        <span>{{ user ? $t("sign.log-out") : $t("sign.log-in") }}</span>
       </v-tooltip>
 
       <v-tooltip bottom color="var(--v-background-base)">
@@ -32,7 +48,9 @@
             <v-icon v-else color="yellow">fa-lightbulb-o</v-icon>
           </v-btn>
         </template>
-        <span>Dark/Light Mode</span>
+        <span>{{
+          !$vuetify.theme.dark ? $t("menu.dark") : $t("menu.light")
+        }}</span>
       </v-tooltip>
     </v-app-bar>
 
@@ -74,11 +92,13 @@
 <script>
 import Bar from "./components/Bar";
 import ConfirmBox from "@/components/Shared/ConfirmBox";
+import i18n from "./i18n";
 
 export default {
   name: "App",
   data: () => ({
     drawer: null,
+    dynamicImg: "./assets/en.png",
   }),
 
   components: {
@@ -117,6 +137,21 @@ export default {
         this.$vuetify.theme.dark ? "dark" : "light"
       );
     },
+
+    setLocal() {
+      let locale = "";
+      if (this.$i18n.locale == "fr") {
+        locale = "en";
+      } else if (this.$i18n.locale == "en") {
+        locale = "fr";
+      }
+      this.$i18n.locale = locale;
+      this.$router.push({
+        params: { lang: locale },
+      });
+      localStorage.setItem("lang", locale);
+    },
+
     onDismissed() {
       this.$store.dispatch("clearError");
     },
@@ -132,13 +167,13 @@ export default {
                 localStorage.removeItem("theme");
               }
               this.$store.dispatch("logout");
-              this.$router.push("/login");
+              this.$router.push(`/${i18n.locale}/login`);
               this.$store.commit("resetPhotoURL");
               this.$store.dispatch("fetchData");
             }
           });
       } else {
-        this.$router.push("/login");
+        this.$router.push(`/${i18n.locale}/login`);
       }
     },
   },
