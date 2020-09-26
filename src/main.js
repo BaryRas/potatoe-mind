@@ -7,6 +7,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import Alert from "./components/Shared/Alert.vue";
 import SuccessSnackbar from "./components/Shared/SuccessSnackbar.vue";
+import i18n from "./i18n";
 
 Vue.config.productionTip = false;
 Vue.component("app-alert", Alert);
@@ -40,6 +41,19 @@ const persist = firebase.auth().onAuthStateChanged((user) => {
   } else {
     store.dispatch("fetchData");
   }
+  i18n.locale = localStorage.getItem("lang") || "fr";
+});
+
+router.beforeEach((to, from, next) => {
+  // use language from the routing param or default language
+  let language = to.params.lang;
+  if (!language) {
+    language = "fr";
+  }
+
+  // set the current language for i18n.
+  i18n.locale = language;
+  next();
 });
 
 new Vue({
@@ -47,6 +61,7 @@ new Vue({
   store,
   vuetify,
   persist,
+  i18n,
   render: (h) => h(App),
   created() {
     this.$store.dispatch("fetchData");

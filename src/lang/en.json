@@ -1,0 +1,81 @@
+{
+  "menu": {
+    "dark": "Dark mode",
+    "light": "Light mode",
+    "home": "Home",
+    "lang": "Switch to French"
+  },
+  "bar": {
+    "all-tasks": "All Tasks",
+    "today": "Today",
+    "upcoming": "upcoming",
+    "outdate": "Outdate",
+    "project": "Project",
+    "new-project": "New Project"
+  },
+  "header": {
+    "hello": "Hello",
+    "fellings": "Looks like feel good",
+    "today-tasks": "Your today's task: ",
+    "calendar": "Today",
+    "quote": "Progress is progress, no matter how small"
+  },
+  "list-project": {
+    "task": "Tasks"
+  },
+  "tabs": {
+    "tab-title": "Resume Tasks",
+    "tab-message": "no longer task, You are good"
+  },
+  "todo": {
+    "add-button": "Add Task",
+    "delete-project": "Delete Project"
+  },
+  "add-task": {
+    "question-task": "What tasks are you planning to perform?",
+    "suggest-note-task": "Add note and plan your potatoes recipe!",
+    "input-task": "Your task",
+    "input-note": "Add note",
+    "input-required": "Empty input is not required",
+    "input-email": "E-mail must be valid"
+  },
+  "add-project": {
+    "project-title": "Create a great project",
+    "project-input": "Project name",
+    "project-icon": "Choose an icon",
+    "project-done": "Done"
+  },
+  "confirm-box": {
+    "delete-header": "Delete",
+    "delete-task-confirm": "Are you sure to delete this task?",
+    "delete-project-confirm": "Are you sure to delete this project?",
+    "yes-confirm": "Yes",
+    "no-confirm": "No"
+  },
+  "success-snackbar": {
+    "add-success": "Tasks added successfully"
+  },
+  "recover": {
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "recover-title": "Recover your password?"
+  },
+  "sign": {
+    "log-in": "Log In",
+    "log-out": "Log Out",
+    "sign-up": "S'inscrire",
+    "signIn-title": "Sign in to remind Potatoes",
+    "signIn-sub-title": "Ensure your mail for registration",
+    "forget-password": "Forget Your password?",
+    "signIn-side-title": "Potatoe yet!!",
+    "signIn-side-sub-title": "Enter your personal details and start journey with us",
+    "signUp-title": "Join Potatoes team",
+    "signUp-side-title": "Welcome back",
+    "signUp-side-sub-title": "To keep connected with us, please Login with your personnel info"
+  },
+  "input": {
+    "password": "password",
+    "name": "name",
+    "confirm": "confirm password"
+  }
+}

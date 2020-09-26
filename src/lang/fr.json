@@ -1,0 +1,81 @@
+{
+  "menu": {
+    "dark": "Mode sombre",
+    "light": "Mode claire",
+    "home": "Accueil",
+    "lang": "Basculer en Anglais"
+  },
+  "bar": {
+    "all-tasks": "Les tâches",
+    "today": "Aujourd'hui",
+    "upcoming": "Prochainement",
+    "outdate": "En retard",
+    "project": "Projet",
+    "new-project": "Nouveau projet"
+  },
+  "header": {
+    "hello": "Bonjour",
+    "fellings": "Tout va bien",
+    "today-tasks": "Aujourd'hui, vous avez: ",
+    "calendar": "Aujourd'hui",
+    "quote": "Un progrès c'est un progrès, aussi petit soit-il"
+  },
+  "list-project": {
+    "task": "Tâches"
+  },
+  "tabs": {
+    "tab-title": "Résumé des taĉhes",
+    "tab-message": "Plus de tâche, tout est bon"
+  },
+  "todo": {
+    "add-button": "Ajouter tâche",
+    "delete-project": "Supprimer projet"
+  },
+  "add-task": {
+    "question-task": "Quelles tâches comptez-vous effectuer?",
+    "suggest-note-task": "Ajoutez une note et planifiez votre recette de potatoes!",
+    "input-task": "Votre tâche ici",
+    "input-note": "Ajouter note",
+    "input-required": "Entréé vide n'est pas valide",
+    "input-email": "E-mail doit être valide"
+  },
+  "add-project": {
+    "project-title": "Créer un super projet",
+    "project-input": "Nom du projet",
+    "project-icon": "Choisir un icon",
+    "project-done": "Créer"
+  },
+  "confirm-box": {
+    "delete-header": "Supprimer",
+    "delete-task-confirm": "Etes-vous sûr de vouloir supprimer cette tâche?",
+    "delete-project-confirm": "Etes-vous sûr de vouloir supprimer ce projet?",
+    "yes-confirm": "Oui",
+    "no-confirm": "Non"
+  },
+  "success-snackbar": {
+    "add-success": "Tâche ajoutée avec succée"
+  },
+  "recover": {
+    "cancel": "Annuler",
+    "reset": "Récupérer",
+    "recover-title": "Récupérer votre mot de pass?"
+  },
+  "sign": {
+    "log-in": "S'identifier",
+    "log-out": "Se déconnecter",
+    "sign-up": "S'inscrire",
+    "signIn-title": "Connectez-vous à Potatoes",
+    "signIn-sub-title": "Vérifiez votre e-mail pour l'inscription",
+    "forget-password": "Mot de pass oublié?",
+    "signIn-side-title": "Rejoindre Potatoe",
+    "signIn-side-sub-title": "Entrez vos informations personnelles et commencez votre voyage avec nous",
+    "signUp-title": "Rejoindre l'équipe Potatoe",
+    "signUp-side-title": "Bon retour",
+    "signUp-side-sub-title": "Pour rester dans l'aventure, veuillez vous connecter avec vos informations personnelles"
+  },
+  "input": {
+    "password": "mot de passe",
+    "name": "nom",
+    "confirm": "confirme le mot de passe"
+  }
+}

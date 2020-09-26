@@ -1,26 +1,32 @@
 <template>
   <div class="avatar">
-    <h1 class="avatar_name font-weight-bold">Hello, {{ name }}.</h1>
+    <h1 class="avatar_name font-weight-bold">
+      {{ $t("header.hello") }}, {{ name }}.
+    </h1>
     <p class="avatar_tips">
-      Looks like feel good.<br />You have
-      <strong>{{ todayTasks.length }} tasks </strong> to do today.
+      {{ $t("header.fellings") }}.<br />
+      {{ $t("header.today-tasks")
+      }}<strong>{{ todayTasks.length }} {{ $t("list-project.task") }} </strong>.
     </p>
-    <p class="avatar_date">TODAY : {{ today }}</p>
+    <p class="avatar_date">
+      {{ $t("header.calendar") }} :
+      {{ $d(new Date(), "short", `${dateLocale}`) }}
+    </p>
   </div>
 </template>
 
 <script>
 import moment from "moment-mini";
+import i18n from "../i18n";
 
 export default {
-  data() {
-    return {
-      today: moment(new Date()).format("dddd, D MMMM YYYY"),
-    };
-  },
   computed: {
     todayTasks() {
       return this.$store.state.categories[1].items;
+    },
+
+    dateLocale() {
+      return i18n.locale == "en" ? "en-US" : "fr-FR";
     },
 
     name() {

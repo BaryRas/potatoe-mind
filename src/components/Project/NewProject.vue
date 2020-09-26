@@ -1,12 +1,12 @@
 <template>
   <form>
     <div class="segment">
-      <h1>Create A Great Project</h1>
+      <h1>{{ $t("add-project.project-title") }}</h1>
     </div>
 
     <v-text-field
-      label="Project Name"
-      name="Project Name"
+      :label="`${$t('add-project.project-input')}`"
+      :name="`${$t('add-project.project-input')}`"
       v-model="projectName"
       single-line
       :rules="projectRules"
@@ -16,7 +16,7 @@
     </v-text-field>
 
     <div class="segment">
-      <h2 class="mb-8">Choose an icon</h2>
+      <h2 class="mb-8">{{ $t("add-project.project-icon") }}</h2>
 
       <div class="checkbox d-flex flex-wrap justify-content-center">
         <div class="checkbox__item" v-for="(icon, i) in icons" :key="i">
@@ -34,17 +34,21 @@
       </div>
       <v-btn
         class="done mt-15"
+        v-if="projectName !== ''"
         x-large
         @click="addProject"
         color="var(--v-background-base)"
       >
-        <v-icon left>fa-check-square-o</v-icon> Done
+        <v-icon left>fa-check-square-o</v-icon>
+        {{ $t("add-project.project-done") }}
       </v-btn>
     </div>
   </form>
 </template>
 
 <script>
+import i18n from "../../i18n";
+
 export default {
   data: () => ({
     icons: [
@@ -62,9 +66,14 @@ export default {
     labelIcon: "",
     projectName: "",
     projectRules: [
-      (v) => !!v || "Project name is required",
       (v) =>
-        (v && v.length <= 15) || "Project name must be less than 15 characters",
+        !!v || i18n.locale == "en"
+          ? "Project name is required"
+          : "Nom du projet est requis",
+      (v) =>
+        (v && v.length <= 15) || i18n.locale == "en"
+          ? "Project name must be less than 15 characters"
+          : "Nom du projet doit-être inférieur à 15",
     ],
   }),
   methods: {

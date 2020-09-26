@@ -12,7 +12,7 @@
                 <v-col cols="12" md="8" class="background">
                   <v-card-text class="mt-12">
                     <h1 class="text-center display-2 red-custom">
-                      Sign in to Remind Potatoes
+                      {{ $t("sign.signIn-title") }}
                     </h1>
                     <div class="text-center mt-4">
                       <v-btn
@@ -37,7 +37,7 @@
                     <h4
                       class="text-center mt-4 blue-grey--text text--lighten-2"
                     >
-                      Ensure your mail for registration
+                      {{ $t("sign.signIn-sub-title") }}
                     </h4>
                     <v-form>
                       <v-text-field
@@ -51,8 +51,8 @@
                       </v-text-field>
 
                       <v-text-field
-                        label="password"
-                        name="password"
+                        :label="`${$t('input.password')}`"
+                        :name="`${$t('input.password')}`"
                         v-model="password"
                         type="password"
                         :rules="passRules"
@@ -66,19 +66,23 @@
                       @click.stop="switchDialog"
                       style="cursor: pointer;"
                     >
-                      Forget your password ?
+                      {{ $t("sign.forget-password") }}
                     </h3>
                     <recover-password />
                   </v-card-text>
                   <div class="text-center my-3">
-                    <v-btn @click="onSignIn" color="primary">SIGN IN</v-btn>
+                    <v-btn @click="onSignIn" color="primary">{{
+                      $t("sign.log-in")
+                    }}</v-btn>
                   </div>
                 </v-col>
                 <v-col cols="12" md="4" class="gradient">
                   <v-card-text class="white--text mt-12">
-                    <h1 class="text-center display-1 p-dark">Potato Yet !!</h1>
+                    <h1 class="text-center display-1 p-dark">
+                      {{ $t("sign.signIn-side-title") }}
+                    </h1>
                     <h5 class="text-center p-dark">
-                      Enter your personal details and start journey with us
+                      {{ $t("sign.signIn-side-sub-title") }}
                     </h5>
                   </v-card-text>
                   <div class="text-center">
@@ -86,7 +90,8 @@
                       @click="step++"
                       class="b-dark custom-btn-login"
                       color="quartery"
-                      >SIGN UP</v-btn
+                    >
+                      {{ $t("sign.sign-up") }}</v-btn
                     >
                   </div>
                 </v-col>
@@ -100,10 +105,11 @@
               <v-row class="fill-height">
                 <v-col class="gradient" cols="12" md="4">
                   <v-card-text class="white--text mt-12">
-                    <h1 class="text-center display-1 p-dark">Welcome Back</h1>
+                    <h1 class="text-center display-1 p-dark">
+                      {{ $t("sign.signUp-side-title") }}
+                    </h1>
                     <h5 class="text-center p-dark">
-                      To keep connected with us, please Login with your
-                      personnel info
+                      {{ $t("sign.signUp-side-sub-title") }}
                     </h5>
                   </v-card-text>
                   <div class="text-center">
@@ -111,14 +117,14 @@
                       @click="step--"
                       class="b-dark custom-btn-login"
                       color="quartery"
-                      >SIGN IN</v-btn
+                      >{{ $t("sign.log-in") }}</v-btn
                     >
                   </div>
                 </v-col>
                 <v-col cols="12" md="8" class="background">
                   <v-card-text class="mt-12">
                     <h1 class="text-center display-2 custom-2">
-                      Join Potatoes Team
+                      {{ $t("sign.signUp-title") }}
                     </h1>
                     <div class="text-center mt-4">
                       <v-btn
@@ -143,13 +149,14 @@
                     <h4
                       class="text-center mt-4 blue-grey--text text--lighten-2"
                     >
-                      Ensure your email for registration
+                      {{ $t("sign.signIn-sub-title") }}
                     </h4>
                     <v-form @submit.prevent="onSignUp">
                       <v-text-field
-                        label="Name"
-                        name="Name"
+                        :label="`${$t('input.name')}`"
+                        :name="`${$t('input.name')}`"
                         v-model="name"
+                        :rules="nameRules"
                         type="texte"
                         color="secondary"
                       >
@@ -164,8 +171,8 @@
                       >
                       </v-text-field>
                       <v-text-field
-                        label="Password"
-                        name="Password"
+                        :label="`${$t('input.password')}`"
+                        :name="`${$t('input.password')}`"
                         v-model="password"
                         type="password"
                         :rules="passRules"
@@ -174,8 +181,8 @@
                       >
                       </v-text-field>
                       <v-text-field
-                        label="Confirm Password"
-                        name="Confirm Password"
+                        :label="`${$t('input.confirm')}`"
+                        :name="`${$t('input.confirm')}`"
                         v-model="confirmPassword"
                         type="password"
                         :rules="[comparePasswords]"
@@ -186,9 +193,18 @@
                     </v-form>
                   </v-card-text>
                   <div class="text-center mt-n5">
-                    <v-btn color="primary" @click.prevent="onSignUp"
-                      >SIGN UP</v-btn
+                    <v-btn
+                      v-if="
+                        this.name != '' &&
+                          /.+@.+\..+/.test(this.email) &&
+                          this.password.length >= 6 &&
+                          this.password === this.confirmPassword
+                      "
+                      color="primary"
+                      @click.prevent="onSignUp"
                     >
+                      {{ $t("sign.sign-up") }}
+                    </v-btn>
                   </div>
                 </v-col>
               </v-row>
@@ -204,6 +220,7 @@
 import uuid from "uuid/v4";
 import firebase from "firebase";
 import RecoverPassword from "./RecoverPassword";
+import i18n from "../../i18n";
 
 export default {
   name: "Login",
@@ -222,14 +239,29 @@ export default {
       password: "",
       photoURL: "",
       confirmPassword: "",
+      nameRules: [
+        (v) =>
+          !!v || i18n.locale == "en" ? "Name is required" : "Nom est requis",
+      ],
       emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+        (v) =>
+          !!v || i18n.locale == "en"
+            ? "E-mail is required"
+            : "E-mail est requis",
+        (v) =>
+          /.+@.+\..+/.test(v) || i18n.locale == "en"
+            ? "E-mail must be valid"
+            : "E-mail doit-être valide",
       ],
       passRules: [
-        (v) => !!v || "Password is required",
         (v) =>
-          (v && v.length >= 6) || "Password must be more than 6 characters",
+          !!v || i18n.locale == "en"
+            ? "Password is required"
+            : "Mot de passe est requis",
+        (v) =>
+          (v && v.length >= 6) || i18n.locale == "en"
+            ? "Password must be more than 6 characters"
+            : "Mot de passe doit-être supérieur à 6",
       ],
     };
   },
@@ -247,7 +279,7 @@ export default {
   watch: {
     user(value) {
       if (value !== null && value !== undefined) {
-        this.$router.push("/");
+        this.$router.push(`/${i18n.locale}`);
       }
     },
   },
@@ -308,7 +340,6 @@ export default {
 <style lang="scss">
 .gradient {
   background-color: #64738a;
-  // box-shadow: 14px 14px 28px #b51a0b, -14px -14px 28px #ff2e13;
   div,
   h1,
   h5,

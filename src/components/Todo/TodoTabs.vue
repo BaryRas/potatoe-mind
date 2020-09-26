@@ -25,7 +25,7 @@
             class="text-center my-15"
           >
             <!-- If no Task -->
-            No Longer Task, You are Good
+            {{ $t("tabs.tab-message") }}
           </v-card-text>
 
           <!-- If Array is not umpty -->
@@ -50,6 +50,7 @@
 <script>
 import TaskItem from "./TaskItem";
 import uuid from "uuid/v4";
+import i18n from "../../i18n";
 
 export default {
   props: {
@@ -64,7 +65,7 @@ export default {
       tab: false,
       items: [
         {
-          label: "Today",
+          label: `${i18n.message.bar.today}`,
           content: this.todo.items.todayTask,
           id: uuid(),
         },

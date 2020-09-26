@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import i18n from "../i18n";
 import Home from "../views/Home.vue";
 import Login from "../components/Register/Login.vue";
 import AddTodo from "../components/Todo/AddTodo.vue";
@@ -12,37 +13,51 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    redirect: `/${i18n.locale}`,
   },
   {
-    path: "/login",
-    name: "Login",
-    component: Login,
-  },
-  {
-    path: "/todo/:project",
-    props: true,
-    name: "Todo",
-    components: { default: Todo },
+    path: "/:lang",
+    component: {
+      render(c) {
+        return c("router-view");
+      },
+    },
     children: [
       {
-        path: "/new-task",
+        path: "/",
+        name: "Home",
+        component: Home,
+      },
+      {
+        path: "login",
+        name: "Login",
+        component: Login,
+      },
+      {
+        path: "todo/:project",
         props: true,
-        name: "AddTodo",
-        component: AddTodo,
+        name: "Todo",
+        components: { default: Todo },
+        children: [
+          {
+            path: "/new-task",
+            props: true,
+            name: "AddTodo",
+            component: AddTodo,
+          },
+        ],
+      },
+      {
+        path: "project/new",
+        name: "NewProject",
+        component: NewProject,
+      },
+      {
+        path: "*",
+        name: "PageNotFound",
+        component: PageNotFound,
       },
     ],
-  },
-  {
-    path: "/project/new",
-    name: "NewProject",
-    component: NewProject,
-  },
-  {
-    path: "*",
-    name: "PageNotFound",
-    component: PageNotFound,
   },
 ];
 

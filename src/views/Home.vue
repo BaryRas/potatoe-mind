@@ -17,9 +17,9 @@
       color="var(--v-background-base)"
       class="card-shadow pb-2 mx-10 mb-10"
     >
-      <v-card-title class="text-center justify-center py-6">
-        <h1 class="font-weight-bold">
-          Resume Tasks
+      <v-card-title class="text-center justify-center pt-10 pb-8">
+        <h1 class="font-weight-bold ">
+          {{ $t("tabs.tab-title") }}
         </h1>
       </v-card-title>
 
@@ -32,7 +32,7 @@
         centered
       >
         <v-tab v-for="(item, i) in categories" :key="i" :id="item.icon">
-          {{ item.text }}
+          {{ $t(`bar.${item.text}`) }}
         </v-tab>
       </v-tabs>
 
@@ -45,7 +45,7 @@
               class="text-center my-15"
             >
               <!-- If no Task -->
-              No Longer Task, You are Good
+              {{ $t("tabs.tab-message") }}
             </v-card-text>
 
             <!-- If Array is not umpty -->

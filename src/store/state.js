@@ -16,9 +16,9 @@ export default {
   editing: null,
   todos: [],
   categories: [
-    { icon: "fa-folder-o", text: "All Tasks", items: [] },
-    { icon: "fa-clock-o", text: "Today", items: [] },
-    { icon: "fa-bullhorn", text: "Upcoming", items: [] },
-    { icon: "fa-refresh", text: "Outdate", items: [] },
+    { icon: "fa-folder-o", text: "all-tasks", items: [] },
+    { icon: "fa-clock-o", text: "today", items: [] },
+    { icon: "fa-bullhorn", text: "upcoming", items: [] },
+    { icon: "fa-refresh", text: "outdate", items: [] },
   ],
 };

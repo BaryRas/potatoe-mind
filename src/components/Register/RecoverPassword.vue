@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="dialog" max-width="490">
     <v-card color="var(--v-background-base)">
-      <v-card-title class="headline">Recover your password</v-card-title>
+      <v-card-title class="headline">{{
+        $t("recover.recover-title")
+      }}</v-card-title>
 
       <v-card-text>
         <v-form>
@@ -21,7 +23,7 @@
         <v-spacer></v-spacer>
 
         <v-btn color="red darken-1" text @click.prevent="switchDialog">
-          Cancel
+          {{ $t("recover.cancel") }}
         </v-btn>
 
         <v-btn
@@ -29,7 +31,7 @@
           text
           @click.prevent="sendPasswordResetEmail"
         >
-          Reset
+          {{ $t("recover.reset") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -38,14 +40,21 @@
 
 <script>
 import firebase from "firebase";
+import i18n from "../../i18n";
 
 export default {
   data() {
     return {
       email: "",
       emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+        (v) =>
+          !!v || i18n.locale == "en"
+            ? "E-mail is required"
+            : "E-mail est requis",
+        (v) =>
+          /.+@.+\..+/.test(v) || i18n.locale == "en"
+            ? "E-mail must be valid"
+            : "E-mail doit-être valide",
       ],
     };
   },
