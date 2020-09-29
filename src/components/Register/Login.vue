@@ -41,8 +41,8 @@
                     </h4>
                     <v-form>
                       <v-text-field
-                        label="email"
-                        name="email"
+                        label="email*"
+                        name="email*"
                         v-model="email"
                         type="email"
                         :rules="emailRules"
@@ -162,8 +162,8 @@
                       >
                       </v-text-field>
                       <v-text-field
-                        label="Email"
-                        name="Email"
+                        label="email*"
+                        name="email*"
                         v-model="email"
                         type="email"
                         :rules="emailRules"
