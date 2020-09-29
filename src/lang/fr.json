@@ -3,7 +3,7 @@
     "dark": "Mode sombre",
     "light": "Mode claire",
     "home": "Accueil",
-    "lang": "Basculer en Anglais"
+    "lang": "Switch to English"
   },
   "bar": {
     "all-tasks": "Les tâches",
@@ -61,7 +61,7 @@
     "recover-title": "Récupérer votre mot de pass?"
   },
   "sign": {
-    "log-in": "S'identifier",
+    "log-in": "Se connecter",
     "log-out": "Se déconnecter",
     "sign-up": "S'inscrire",
     "signIn-title": "Connectez-vous à Potatoes",
@@ -74,8 +74,8 @@
     "signUp-side-sub-title": "Pour rester dans l'aventure, veuillez vous connecter avec vos informations personnelles"
   },
   "input": {
-    "password": "mot de passe",
-    "name": "nom",
-    "confirm": "confirme le mot de passe"
+    "password": "mot de passe*",
+    "name": "nom*",
+    "confirm": "confirmez le mot de passe*"
   }
 }
