@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import moment from "moment-mini";
 import i18n from "../i18n";
 
 export default {

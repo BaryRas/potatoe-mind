@@ -15,13 +15,13 @@ Vue.component("success-snackbar", SuccessSnackbar);
 
 // Firebase and firestore
 firebase.initializeApp({
-  apiKey: "AIzaSyCAjq86_FDVfpmQeoYUKK9UHPD9xxgpQtA",
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: "todo-vuetify-e09e5.firebaseapp.com",
   databaseURL: "https://todo-vuetify-e09e5.firebaseio.com",
   projectId: "todo-vuetify-e09e5",
   storageBucket: "todo-vuetify-e09e5.appspot.com",
-  messagingSenderId: "1070499049227",
-  appId: "1:1070499049227:web:315dca9a0e7c0c49197c0e",
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,
 });
 export const db = firebase.firestore();
 

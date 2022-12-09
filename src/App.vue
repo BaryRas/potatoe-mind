@@ -57,6 +57,9 @@
     <app-bar />
 
     <v-main>
+      <!-- Welcome box -->
+      <welcome-box v-if="!user" />
+
       <!-- Show if only error   -->
       <v-row class="d-flex justify-center mt-18" v-if="error">
         <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
@@ -92,6 +95,7 @@
 <script>
 import Bar from "./components/Bar";
 import ConfirmBox from "@/components/Shared/ConfirmBox";
+import WelcomeBox from "@/components/Shared/WelcomeBox";
 import i18n from "./i18n";
 
 export default {
@@ -104,6 +108,7 @@ export default {
   components: {
     "app-bar": Bar,
     confirm: ConfirmBox,
+    WelcomeBox,
   },
 
   watch: {
