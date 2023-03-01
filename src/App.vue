@@ -5,7 +5,11 @@
         @click.stop="switchDrawer"
         class="ml-5"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>Potatoe Mind</v-toolbar-title>
+      <router-link to="/" class="title-bar">
+          <v-toolbar-title >
+              Potatoe Mind        
+          </v-toolbar-title>
+        </router-link>
       <v-spacer></v-spacer>
 
       <v-tooltip bottom color="var(--v-background-base)">
@@ -204,6 +208,10 @@ body {
 .v-toolbar__title,
 .project-title {
   font-family: "Rock Salt", sans-serif;
+}
+
+.title-bar {
+  text-decoration: none;
 }
 
 form {
